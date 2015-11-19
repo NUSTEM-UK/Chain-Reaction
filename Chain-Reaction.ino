@@ -3,8 +3,8 @@
 
 // Configure operation mode
 String input = "FSR";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
-String output = "SERVO";					// MOTOR, SERVO, CONTSERVO
-String mode = "CONTINUOUS";				// set to THRESHOLD or CONTINUOUS
+String output = "RELAY";					// SERVO, CONTSERVO, RELAY
+String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for RELAY output)
 String behaviour = "RESET";				// set to LATCHING or RESET
 
 // Configure value for threshold mode
@@ -34,11 +34,15 @@ Servo myServo1;
 const int servoPinCont = 10;
 Servo contServo1;
 
+// Configure relay
+const int relayPin1 = 4;								// pin to which relay is connected
+
 // setup connects all the bits and makes sure they're working. Ignore this and skip to loop() !
 void setup() {
 	Serial.begin(9600);           	// establish a serial connection for debugging
 	pinMode(ledPin1, OUTPUT);     	// set up the LED
 	pinMode(tiltDigitalPin, INPUT);	// configure for tilt sensor input
+	pinMode(relayPin1, OUTPUT);
 	myServo1.attach(servoPin1);   	// set up the servo
 	myServo1.write(angleRest);
 	contServo1.attach(servoPinCont);// set up the continuous-rotation servo
@@ -61,8 +65,9 @@ void loop() {
 				myServo1.write(angleTriggered);
 			} else if ( output == "CONTSERVO" ) {
 				contServo1.write(contServoMove);
+			} else if ( output == "RELAY" ) {
+				digitalWrite(relayPin1, HIGH);
 			}
-			
 		} else {
 			// It hasn't, so return servo to rest if we're in RESET mode
 			// (LATCHING mode will not return to rest once triggered, until Arduino is reset)
@@ -71,6 +76,8 @@ void loop() {
 					myServo1.write(angleRest);
 				} else if ( output == "CONTSERVO" ) {
 					contServo1.write(contServoStop);
+				} else if ( output == "RELAY" ) {
+					digitalWrite(relayPin1, LOW);
 				}
 			}
 		}
