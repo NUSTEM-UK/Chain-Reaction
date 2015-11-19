@@ -14,10 +14,10 @@ int updateSensors() {
 	int sensorReading; // Declare the variable we're about to use
 	
 	// Cascade through possible inputs, pulling data off the relevant sensor pin
-	if ( input == "LDR" ) {
+	if ( input == "LIGHT" ) {
 		sensorReading = analogRead(ldrAnalogPin);
 		sensorReading = map(sensorReading, 100, 800, 0, 180);
-	} else if ( input == "FSR" ) {
+	} else if ( input == "FORCE" ) {
 		sensorReading = analogRead(fsrAnalogPin);
 		sensorReading = map(sensorReading, 0, 1023, 0, 180);
 	} else if ( input == "FLEX" ) {
@@ -58,4 +58,35 @@ void setup() {
 	contServo1.attach(servoPinCont);// set up the continuous-rotation servo
 	contServo1.write(contServoStop);// set to zero rotation
 	delay(200);                   	// wait for servo to move into position
+}
+
+void thresholdBehaviour() {
+	// It has, so move the servo
+	if ( output == "SERVO" ) {
+		myServo1.write(angleTriggered);
+	} else if ( output == "CONTSERVO" ) {
+		contServo1.write(contServoMove);
+	} else if ( output == "RELAY" ) {
+		digitalWrite(relayPin1, HIGH);
+	}
+}
+
+void noThresholdBehaviour() {
+	if ( behaviour == "RESET" ) { 
+		if ( output == "SERVO" ) {
+			myServo1.write(angleRest);
+		} else if ( output == "CONTSERVO" ) {
+			contServo1.write(contServoStop);
+		} else if ( output == "RELAY" ) {
+			digitalWrite(relayPin1, LOW);
+		}
+	}
+}
+
+void continuousBehaviour() {
+	if ( output == "SERVO" ) {
+		myServo1.write(sensorValue);
+	} else if ( output == "CONTSERVO" ) {
+		contServo1.write(sensorValue);
+	}
 }

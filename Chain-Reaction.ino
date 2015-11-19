@@ -1,8 +1,8 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "FSR";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
-String output = "CONTSERVO";					// SERVO, CONTSERVO, RELAY
+String input = "FORCE";		// LIGHT, FORCE, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
+String output = "SERVO";					// SERVO, CONTSERVO, RELAY
 String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for RELAY output)
 String behaviour = "RESET";				// set to LATCHING or RESET
 
@@ -38,53 +38,30 @@ const int relayPin1 = 4;								// pin to which relay is connected
 
 // The loop is the code the Arduino executes over and over and over. 
 void loop() {
-	
 	// Get updated data from sensor, which comes back mapped as an integer between 0 and 180
 	int sensorValue = updateSensors();	
-	
+
 	if ( mode == "THRESHOLD" ) {
-		
-		// Test if sensor input has exceeded threshold
+		// Test if sensor input has exceeded threshold. Change '>' to '<' for opposite behaviour.
 		if ( sensorValue > threshold ) {
-			// It has, so move the servo
-			if ( output == "SERVO" ) {
-				myServo1.write(angleTriggered);
-			} else if ( output == "CONTSERVO" ) {
-				contServo1.write(contServoMove);
-			} else if ( output == "RELAY" ) {
-				digitalWrite(relayPin1, HIGH);
-			}
+			thresholdBehaviour();
 		} else {
-			// It hasn't, so return servo to rest if we're in RESET mode
+			// if condition not met, return servo to rest if we're in RESET mode
 			// (LATCHING mode will not return to rest once triggered, until Arduino is reset)
-			if ( behaviour == "RESET" ) { 
-				if ( output == "SERVO" ) {
-					myServo1.write(angleRest);
-				} else if ( output == "CONTSERVO" ) {
-					contServo1.write(contServoStop);
-				} else if ( output == "RELAY" ) {
-					digitalWrite(relayPin1, LOW);
-				}
-			}
+			noThresholdBehaviour();
 		}
 		// end of THRESHOLD mode
 	} else {
-		// We're working CONTINUOUS, so update the servo directly
-		// myServo1.write(sensorValue);
-
-		if ( output == "SERVO" ) {
-			myServo1.write(sensorValue);
-		} else if ( output == "CONTSERVO" ) {
-			contServo1.write(sensorValue);
-		}
-		
+		// If not THRESHOLD, we must be working CONTINUOUS, so update the outputs directly
+		continuousBehaviour();
+		// NB. RELAY output isn't updated in CONTINUOUS mode
 	}
 	
 	// Output sensorValue to serial for debug purposes
 	Serial.print("sensorValue = ");
 	Serial.println(sensorValue);
 	
-	// Flash the LED to prove things are working. Comment out to speed up the loop.
+	// Flash the LED to show... flashing. Change the delay value or comment out to speed up the loop.
 	// blink(100);
 }
 
