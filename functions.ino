@@ -20,8 +20,11 @@ int updateSensors() {
 	} else if ( input == "FSR" ) {
 		sensorReading = analogRead(fsrAnalogPin);
 		sensorReading = map(sensorReading, 0, 1023, 0, 180);
+	} else if ( input == "FLEX" ) {
+		sensorReading = analogRead(flexAnalogPin);
+		sensorReading = map(sensorReading, 720, 850, 0, 180);
 	} else {
-		sensorReading = 88; // If all you see in the serial window is this, it's gone wrong
+		sensorReading = 88; // If all you see in the serial window is this, we fell through the cascade above
 	}
 	
 	// Make extra certain we're not returning anything except an int between 0 and 180
