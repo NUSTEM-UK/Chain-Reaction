@@ -45,3 +45,17 @@ int updateSensors() {
 	
 	return sensorReading;
 }
+
+// Hiding setup down here to 
+// setup connects all the bits and makes sure they're working. Ignore this and skip to loop() !
+void setup() {
+	Serial.begin(9600);           	// establish a serial connection for debugging
+	pinMode(ledPin1, OUTPUT);     	// set up the LED
+	pinMode(tiltDigitalPin, INPUT);	// configure for tilt sensor input
+	pinMode(relayPin1, OUTPUT);
+	myServo1.attach(servoPin1);   	// set up the servo
+	myServo1.write(angleRest);
+	contServo1.attach(servoPinCont);// set up the continuous-rotation servo
+	contServo1.write(contServoStop);// set to zero rotation
+	delay(200);                   	// wait for servo to move into position
+}

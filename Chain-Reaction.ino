@@ -1,9 +1,8 @@
-// Include Servo library, in case we use it
 #include <Servo.h>
 
 // Configure operation mode
 String input = "FSR";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
-String output = "RELAY";					// SERVO, CONTSERVO, RELAY
+String output = "CONTSERVO";					// SERVO, CONTSERVO, RELAY
 String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for RELAY output)
 String behaviour = "RESET";				// set to LATCHING or RESET
 
@@ -36,19 +35,6 @@ Servo contServo1;
 
 // Configure relay
 const int relayPin1 = 4;								// pin to which relay is connected
-
-// setup connects all the bits and makes sure they're working. Ignore this and skip to loop() !
-void setup() {
-	Serial.begin(9600);           	// establish a serial connection for debugging
-	pinMode(ledPin1, OUTPUT);     	// set up the LED
-	pinMode(tiltDigitalPin, INPUT);	// configure for tilt sensor input
-	pinMode(relayPin1, OUTPUT);
-	myServo1.attach(servoPin1);   	// set up the servo
-	myServo1.write(angleRest);
-	contServo1.attach(servoPinCont);// set up the continuous-rotation servo
-	contServo1.write(contServoStop);// set to zero rotation
-	delay(200);                   	// wait for servo to move into position
-}
 
 // The loop is the code the Arduino executes over and over and over. 
 void loop() {
