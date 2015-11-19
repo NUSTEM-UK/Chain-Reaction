@@ -33,9 +33,10 @@ int updateSensors() {
 		sensorReading = (digitalRead(tiltDigitalPin)) * 180; // Horrid kludge!
 	} else if ( input == "HALL" ) {
 		sensorReading = (digitalRead(hallDigitalPin)) * 180; // Kludging again!
-	}
-	
-	else {
+	} else if ( input == "LOAD" ) {
+		sensorReading = analogRead(loadAnalogPin);
+		sensorReading = map(sensorReading, 900, 1023, 0, 180); // range here is tricky; full load is 50kg!
+	}	else {
 		sensorReading = 88; // If all you see in the serial window is this, we fell through the cascade above
 	}
 	

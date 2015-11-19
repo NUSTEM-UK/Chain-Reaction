@@ -2,7 +2,7 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "HALL";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL
+String input = "LOAD";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
 String output = "SERVO";					// set to MOTOR or SERVO. Not currently used.
 String mode = "CONTINUOUS";				// set to THRESHOLD or CONTINUOUS
 String behaviour = "RESET";				// set to LATCHING or RESET
@@ -18,6 +18,7 @@ const int distanceAnalogPin = 3; 			// pin to which distance sensor is connected
 const int potentiometerAnalogPin = 4; // pin to which potentiometer is connected
 const int tiltDigitalPin = 2;					// pin to which tilt sensor is connected
 const int hallDigitalPin = 3;					// pin to which hall sensor is connected
+const int loadAnalogPin = 5;					// pin to which load sensor is connected
 
 const int ledPin1 = 13; 							// use for diagnostic flashing LED. Pin 13 is mirrored to the onboard LED
 
