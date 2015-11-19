@@ -23,6 +23,9 @@ int updateSensors() {
 	} else if ( input == "FLEX" ) {
 		sensorReading = analogRead(flexAnalogPin);
 		sensorReading = map(sensorReading, 720, 850, 0, 180);
+	} else if ( input == "DISTANCE" ) {
+		sensorReading = analogRead(distanceAnalogPin);
+		sensorReading = map(sensorReading, 0, 1023, 0, 180);
 	} else {
 		sensorReading = 88; // If all you see in the serial window is this, we fell through the cascade above
 	}

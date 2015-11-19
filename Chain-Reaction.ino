@@ -2,19 +2,20 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "FLEX";					// LDR, FSR, FLEX
+String input = "DISTANCE";		// LDR, FSR, FLEX, DISTANCE
 String output = "SERVO";			// set to MOTOR or SERVO. Not currently used.
-String mode = "CONTINUOUS";		// set to THRESHOLD or CONTINUOUS
+String mode = "THRESHOLD";		// set to THRESHOLD or CONTINUOUS
 String behaviour = "RESET";		// set to LATCHING or RESET
 
 // Configure value for threshold mode
-const int threshold = 10;
+const int threshold = 90;
 
 // Configure inputs
-const int ldrAnalogPin = 0;		// pin to which the light-dependent resistor is connected
-const int fsrAnalogPin = 1;		// pin to which force-sensitive resistor is connected
-const int flexAnalogPin = 2;	// pin to which flex sensor is connected
-const int ledPin1 = 13; 			// use for diagnostic flashing LED. Pin 13 is mirrored to the onboard LED
+const int ldrAnalogPin = 0;				// pin to which the light-dependent resistor is connected
+const int fsrAnalogPin = 1;				// pin to which force-sensitive resistor is connected
+const int flexAnalogPin = 2;			// pin to which flex sensor is connected
+const int distanceAnalogPin = 3; 	// pin to which distance sensor is connected
+const int ledPin1 = 13; 					// use for diagnostic flashing LED. Pin 13 is mirrored to the onboard LED
 
 // Configure servo
 int servoPin1 = 9;
