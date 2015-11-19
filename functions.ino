@@ -29,7 +29,13 @@ int updateSensors() {
 	} else if ( input == "POTENTIOMETER" ) {
 		sensorReading = analogRead(potentiometerAnalogPin);
 		sensorReading = map(sensorReading, 0, 1023, 0, 180);
-	} else {
+	} else if ( input == "TILT" ) {
+		sensorReading = (digitalRead(tiltDigitalPin)) * 180; // Horrid kludge!
+	} else if ( input == "HALL" ) {
+		sensorReading = (digitalRead(hallDigitalPin)) * 180; // Kludging again!
+	}
+	
+	else {
 		sensorReading = 88; // If all you see in the serial window is this, we fell through the cascade above
 	}
 	

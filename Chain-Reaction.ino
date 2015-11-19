@@ -2,7 +2,7 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "POTENTIOMETER";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER
+String input = "HALL";		// LDR, FSR, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL
 String output = "SERVO";					// set to MOTOR or SERVO. Not currently used.
 String mode = "CONTINUOUS";				// set to THRESHOLD or CONTINUOUS
 String behaviour = "RESET";				// set to LATCHING or RESET
@@ -16,6 +16,8 @@ const int fsrAnalogPin = 1;						// pin to which force-sensitive resistor is con
 const int flexAnalogPin = 2;					// pin to which flex sensor is connected
 const int distanceAnalogPin = 3; 			// pin to which distance sensor is connected
 const int potentiometerAnalogPin = 4; // pin to which potentiometer is connected
+const int tiltDigitalPin = 2;					// pin to which tilt sensor is connected
+const int hallDigitalPin = 3;					// pin to which hall sensor is connected
 
 const int ledPin1 = 13; 							// use for diagnostic flashing LED. Pin 13 is mirrored to the onboard LED
 
@@ -27,11 +29,12 @@ Servo myServo1;
 
 // setup connects all the bits and makes sure they're working. Ignore this and skip to loop() !
 void setup() {
-	Serial.begin(9600);           // establish a serial connection for debugging
-	pinMode(ledPin1, OUTPUT);     // set up the LED
-	myServo1.attach(servoPin1);   // set up the servo
+	Serial.begin(9600);           	// establish a serial connection for debugging
+	pinMode(ledPin1, OUTPUT);     	// set up the LED
+	pinMode(tiltDigitalPin, INPUT);	// configure for tilt sensor input
+	myServo1.attach(servoPin1);   	// set up the servo
 	myServo1.write(angleRest);
-	delay(200);                   // wait for servo to move into position
+	delay(200);                   	// wait for servo to move into position
 }
 
 // The loop is the code the Arduino executes over and over and over. 
