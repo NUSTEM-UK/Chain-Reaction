@@ -1,15 +1,16 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "FORCE";		// LIGHT, FORCE, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
-String output = "SERVO";					// SERVO, CONTSERVO, RELAY
-String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for RELAY output)
+String input = "FORCE";		// SWITCH, LIGHT, FORCE, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
+String output = "SWITCH";					// SERVO, CONTSERVO, RELAY, SWITCH
+String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for SWITCH or RELAY output)
 String behaviour = "RESET";				// set to LATCHING or RESET
 
 // Configure value for threshold mode
 const int threshold = 90;
 
 // Configure inputs
+const int switchInputPin = 8;							// pin to which switch is connected
 const int ldrAnalogPin = 0;						// pin to which the light-dependent resistor is connected
 const int fsrAnalogPin = 1;						// pin to which force-sensitive resistor is connected
 const int flexAnalogPin = 2;					// pin to which flex sensor is connected
@@ -19,7 +20,9 @@ const int tiltDigitalPin = 2;					// pin to which tilt sensor is connected
 const int hallDigitalPin = 3;					// pin to which hall sensor is connected
 const int loadAnalogPin = 5;					// pin to which load sensor is connected
 
+// Configure outputs
 const int ledPin1 = 13; 							// use for diagnostic flashing LED. Pin 13 is mirrored to the onboard LED
+const int switchOutputPin = 12;							// use for switch output
 
 // Configure servo
 int servoPin1 = 9;
@@ -35,6 +38,8 @@ Servo contServo1;
 
 // Configure relay
 const int relayPin1 = 4;								// pin to which relay is connected
+
+// If you're looking for the setup() function, it's in functions.ino to keep this file a little cleaner
 
 // The loop is the code the Arduino executes over and over and over. 
 void loop() {
@@ -53,8 +58,8 @@ void loop() {
 		// end of THRESHOLD mode
 	} else {
 		// If not THRESHOLD, we must be working CONTINUOUS, so update the outputs directly
-		continuousBehaviour();
-		// NB. RELAY output isn't updated in CONTINUOUS mode
+		continuousBehaviour(sensorValue);
+		// NB. SWITCH or RELAY output isn't updated in CONTINUOUS mode
 	}
 	
 	// Output sensorValue to serial for debug purposes

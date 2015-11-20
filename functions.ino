@@ -30,13 +30,18 @@ int updateSensors() {
 		sensorReading = analogRead(potentiometerAnalogPin);
 		sensorReading = map(sensorReading, 0, 1023, 0, 180);
 	} else if ( input == "TILT" ) {
-		sensorReading = (digitalRead(tiltDigitalPin)) * 180; // Horrid kludge!
+		sensorReading = (digitalRead(tiltDigitalPin) * 180 ); // Horrid kludge!
 	} else if ( input == "HALL" ) {
-		sensorReading = (digitalRead(hallDigitalPin)) * 180; // Kludging again!
+		sensorReading = (digitalRead(hallDigitalPin) * 180 ); // Kludging again!
 	} else if ( input == "LOAD" ) {
 		sensorReading = analogRead(loadAnalogPin);
 		sensorReading = map(sensorReading, 900, 1023, 0, 180); // range here is tricky; full load is 50kg!
-	}	else {
+	}	else if ( input == "SWITCH" ) {
+		sensorReading = ( (1 - digitalRead(switchInputPin)) * 180 ); // More kludging! Switch orientation.
+	}
+	
+	
+	else {
 		sensorReading = 88; // If all you see in the serial window is this, we fell through the cascade above
 	}
 	
@@ -46,11 +51,13 @@ int updateSensors() {
 	return sensorReading;
 }
 
-// Hiding setup down here to 
+// Hiding setup down here to keep code cleaner for students
 // setup connects all the bits and makes sure they're working. Ignore this and skip to loop() !
 void setup() {
 	Serial.begin(9600);           	// establish a serial connection for debugging
 	pinMode(ledPin1, OUTPUT);     	// set up the LED
+	pinMode(switchOutputPin, OUTPUT);			// set up the switched output
+	pinMode(switchInputPin, INPUT_PULLUP); // set up the switch input, normally high
 	pinMode(tiltDigitalPin, INPUT);	// configure for tilt sensor input
 	pinMode(relayPin1, OUTPUT);
 	myServo1.attach(servoPin1);   	// set up the servo
@@ -61,13 +68,14 @@ void setup() {
 }
 
 void thresholdBehaviour() {
-	// It has, so move the servo
 	if ( output == "SERVO" ) {
 		myServo1.write(angleTriggered);
 	} else if ( output == "CONTSERVO" ) {
 		contServo1.write(contServoMove);
 	} else if ( output == "RELAY" ) {
 		digitalWrite(relayPin1, HIGH);
+	} else if ( output == "SWITCH" ) {
+		digitalWrite(switchOutputPin, HIGH);
 	}
 }
 
@@ -79,11 +87,13 @@ void noThresholdBehaviour() {
 			contServo1.write(contServoStop);
 		} else if ( output == "RELAY" ) {
 			digitalWrite(relayPin1, LOW);
+		} else if ( output == "SWITCH" ) {
+			digitalWrite(switchOutputPin, LOW);
 		}
 	}
 }
 
-void continuousBehaviour() {
+void continuousBehaviour(int sensorValue) {
 	if ( output == "SERVO" ) {
 		myServo1.write(sensorValue);
 	} else if ( output == "CONTSERVO" ) {
