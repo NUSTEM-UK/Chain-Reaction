@@ -1,10 +1,10 @@
 #include <Servo.h>
 
 // Configure operation mode
-String input = "FORCE";		// SWITCH, LIGHT, FORCE, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL, LOAD
-String output = "SWITCH";					// SERVO, CONTSERVO, RELAY, SWITCH
+String input = "FORCE";		// SWITCH, LIGHT, FORCE, FLEX, DISTANCE, POTENTIOMETER, TILT, HALL
+String output = "SERVO";					// SERVO, CONTSERVO, RELAY, SWITCH
 String mode = "THRESHOLD";				// set to THRESHOLD or CONTINUOUS (NB. use THRESHOLD for SWITCH or RELAY output)
-String behaviour = "RESET";				// set to LATCHING or RESET
+String behaviour = "RESET";				// set to LATCHING or RESET (for THRESHOLD mode)
 
 // Configure value for threshold mode
 const int threshold = 90;
@@ -67,7 +67,7 @@ void loop() {
 	Serial.println(sensorValue);
 	
 	// Flash the LED to show... flashing. Change the delay value or comment out to speed up the loop.
-	// blink(100);
+	blink(100);
 }
 
 
